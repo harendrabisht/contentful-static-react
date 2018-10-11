@@ -1,38 +1,20 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
-import { createClient } from 'contentful';
 import PostLink from './PostLink';
 
 class Home extends Component {
-  state = {
-    posts: null
-  };
-
-  componentWillMount() {
-    const client = createClient({
-      space: process.env.REACT_APP_SPACE_ID,
-      accessToken: process.env.REACT_APP_ACCESS_TOKEN
-    });
-
-    client
-      .getContentTypes()
-      .then(response => {
-        const postType = response.items.find(item => item.name === 'Post');
-        return postType.sys.id;
-      })
-      .then(id => {
-        client
-          .getEntries({
-            content_type: id
-          })
-          .then(response => {
-            this.setState({
-              posts: response.items
-            });
-          })
-          .catch(console.error);
-      })
-      .catch(console.error);
+  static initialState = {
+    posts: [{
+      id: 1,
+      fields: {
+        featuredImage: '',
+        title: 'welcome to content site'
+      }
+    }]
+  }
+  constructor(props){
+    super(props);
+    this.state = Home.initialState;
   }
 
   render() {
@@ -43,12 +25,12 @@ class Home extends Component {
         {this.state.posts &&
           this.state.posts.map(post => {
             if (post.fields.featuredImage) {
-              imgSrc = post.fields.featuredImage.fields.file.url;
+              imgSrc = post.fields.featuredImage;
             }
             return (
               <PostLink
-                key={post.sys.id}
-                to={post.sys.id}
+                key={post.id}
+                to={post.id}
                 src={imgSrc}
                 title={post.fields.title}
               />

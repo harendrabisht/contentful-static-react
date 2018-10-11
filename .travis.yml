@@ -14,5 +14,5 @@ deploy:
   skip_cleanup: true
   local_dir: build
   default_text_charset: "utf-8"
-  #bucket: "your-s3-bucket-name"
-  #region: your-bucket-region
+  bucket: "elasticbeanstalk-us-east-2-010372538723"
+  region: "US East (Ohio)"
